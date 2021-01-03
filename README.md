@@ -31,4 +31,6 @@ generic file manager access to any app app private directory though.
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
 
-<img src="images/screenshot.png" alt="Screenshot" style="align:center"/>
+<p align="center">
+<img src="images/screenshot.png" >
+</p>
