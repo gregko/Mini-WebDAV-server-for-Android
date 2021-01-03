@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WebDav Server</string>
+    <string name="action_settings">Settings</string>
+    <string name="server_status">HTTP service has not been started</string>
+    <string name="ip_status">Current IP:</string>
+    <string name="service_turn">Start WebDAV server</string>
+    <string name="adb_help">To use with an emulator:\n\n  adb -e forward tcp:8080 tcp:8080\n\nthen use any WebDAV client, connect it to localhost:8080.\nStop port forwarding:\n\n  adb -e forward --remove-all</string>
+</resources>
