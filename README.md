@@ -30,3 +30,7 @@ generic file manager access to any app app private directory though.
 
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
+
+<img src="images/screenshot.png"
+     alt="Markdown Monster icon"
+     style="float: left; margin-right: 10px;" />
