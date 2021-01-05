@@ -30,8 +30,13 @@ generic file manager access to any app app private directory though.
 
 ## Update 1/4/2021
 
-Created WdServerLib library module, and a trivial test app. The app does not have any permissions
-and pulls WdServerLib only when built in DEBUG mode. Then make yourself a discrete debug only button
+Created WdServerLib library module, and a trivial test app. The app pulls the library via build.gradle
+command:
+
+    debugImplementation project(':WdServerLib')
+    
+therefor does not have any permissions when built in RELEASE mode, it
+pulls WdServerLib only when built in DEBUG mode. Then make yourself a discrete debug only button
 or menu item to start the Mini WebDAV Server settings activity:
 
                     Intent intent = new Intent();
