@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+}
+
+def VERSION_CODE = "102"
+def VERSION_NAME = "1.2"
+
+android {
+    publishNonDefault true
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            buildConfigField "String", "VERSION_NAME", "\"" + VERSION_NAME + "\""
+            buildConfigField "int", "VERSION_CODE", VERSION_CODE
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "VERSION_NAME", "\"" + VERSION_NAME + "\""
+            buildConfigField "int", "VERSION_CODE", VERSION_CODE
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}

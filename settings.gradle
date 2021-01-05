@@ -1,2 +1,3 @@
+include ':WdServerLib'
 include ':app'
 rootProject.name = "WebDavServer"

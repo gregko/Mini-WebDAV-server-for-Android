@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wds_app_name">Mini WebDav Server</string>
+    <string name="wds_action_settings">Settings</string>
+    <string name="wds_ip_status">Current IP:</string>
+    <string name="wds_service_turn">Start WebDAV server</string>
+    <string name="wds_all_storage">Browse whole storage</string>
+    <string name="wds_adb_help">To use with an emulator:\n\n  adb -e forward tcp:8080 tcp:8080\n\nthen use any WebDAV client, connect it to localhost:8080.\nStop port forwarding:\n\n  adb -e forward --remove-all</string>
+    <string name="wds_withdraw_perm">You may withdraw manage all files permission now.</string>
+    <string name="wds_storage_perm">This app needs access to the storage on this device. Please allow access to external storage.</string>
+    <string name="wds_approve_perm">You have previously declined this permission.\nYou must approve it in the \"Permissions\" of the app settings on your device.</string>
+</resources>

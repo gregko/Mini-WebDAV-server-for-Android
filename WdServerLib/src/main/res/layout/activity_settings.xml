@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ServerSettingsActivity" >
+
+    <TextView
+        android:id="@+id/app_ver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wds_app_name" />
+
+    <TextView
+        android:id="@+id/ip_status_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/wds_ip_status" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Port:"
+            />
+
+        <EditText
+            android:id="@+id/portNo"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="8080"
+            android:singleLine="true"
+            android:inputType="number"
+            />
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/all_storage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ip_status_textview"
+        android:layout_below="@+id/ip_status_textview"
+        android:layout_marginTop="16dp"
+        android:text="@string/wds_all_storage" />
+
+    <Switch
+        android:id="@+id/server_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ip_status_textview"
+        android:layout_below="@+id/ip_status_textview"
+        android:layout_marginTop="16dp"
+        android:text="@string/wds_service_turn"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:singleLine="false"
+        android:text="@string/wds_adb_help"
+    />
+</LinearLayout>
