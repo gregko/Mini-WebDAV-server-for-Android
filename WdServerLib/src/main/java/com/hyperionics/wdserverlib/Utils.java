@@ -15,8 +15,7 @@ public class Utils
 {
 	// Copy files
 	// http://herolin.twbbs.org/entry/java-copy-file-directory/
-	public static void copyFile(String srFile, String dtFile)
-	{
+	public static void copyFile(String srFile, String dtFile) {
 		try
 		{
 			FileChannel srcChannel = new FileInputStream(srFile).getChannel();
@@ -32,8 +31,7 @@ public class Utils
 	}
 
 	// Recursively copy the entire directory
-	public static void copyDirectory(File source, File target)
-	{
+	public static void copyDirectory(File source, File target) {
 		File[] file = source.listFiles();
 		for (int i = 0; i < file.length; i++)
 		{
@@ -54,8 +52,7 @@ public class Utils
 	}
 
 	// Recursively delete the entire directory
-	public static boolean removeDirectory(File directory)
-	{
+	public static boolean removeDirectory(File directory) {
 		if (directory == null)
 			return false;
 		if (!directory.exists())
@@ -84,8 +81,7 @@ public class Utils
 		return directory.delete();
 	}
 
-	public static String getIPAddress(boolean useIPv4)
-	{
+	public static String getIPAddress(boolean useIPv4) {
 		try
 		{
 			List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -117,7 +113,7 @@ public class Utils
 		}
 		catch (Exception ex)
 		{
-			Log.e("my", "Exception in getIPAddress(): " + ex);
+			Log.e("wdSrv", "Exception in getIPAddress(): " + ex);
 			ex.printStackTrace();
 		}
 		return "";

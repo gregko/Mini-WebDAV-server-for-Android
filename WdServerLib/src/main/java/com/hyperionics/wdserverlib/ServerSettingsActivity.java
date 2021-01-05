@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -59,7 +60,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
         int portNo = getSharedPreferences("WebDav", MODE_PRIVATE).getInt("port", 8080);
         mPortEdit.setText(Integer.toString(portNo));
         boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
-        if (wholeStorage && isExternalStorageManager()) {
+        if (wholeStorage && !isExternalStorageManager()) {
             wholeStorage = false;
             setWholeStorage(false);
         }
@@ -115,7 +116,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
             }
             else {
                 if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    Log.d("my", "Enable storage access...");
+                    Log.d("wdSrv", "Enable storage access...");
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.wds_approve_perm,
                             Snackbar.LENGTH_LONG).setAction(R.string.wds_action_settings, new View.OnClickListener() {
                         @Override
@@ -152,7 +153,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
     @Override
     public void onRationaleDenied(int requestCode) {
         mAllStorageSwitch.setChecked(false);
-        Log.d("my", "Storage rationale denied");
+        Log.d("wdSrv", "Storage rationale denied");
     }
     //endregion
 
@@ -193,6 +194,14 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
     }
 
     @Override
+    protected void onResume() {
+        boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
+        mAllStorageSwitch.setChecked(wholeStorage);
+        mServerSwitch.setChecked(isMyServiceRunning());
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
         savePort();
         super.onPause();
@@ -212,19 +221,19 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
                 .apply();
     }
 
-    private void doStartService()
-    {
-        startService(new Intent(ServerSettingsActivity.this, HttpService.class));
+    private void doStartService() {
+        Intent intent = new Intent(ServerSettingsActivity.this, HttpService.class);
+        //startService(intent);
+        ContextCompat.startForegroundService(this, intent);
     }
 
-    private boolean isMyServiceRunning()
-    {
+    private boolean isMyServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
         {
             if (HttpService.class.getName().equals(service.service.getClassName()))
             {
-                Log.i("my", "service already running...");
+                Log.i("wdSrv", "service already running...");
                 return true;
             }
         }

@@ -1,15 +1,21 @@
 package com.hyperionics.wdserverlib;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -51,13 +57,13 @@ import javax.xml.transform.stream.StreamResult;
 
 public class HttpService extends Service // <--Turtle stuff...
 {
+	public static final String CHANNEL_ID = "WebDAVServiceChannel";
 	private WifiManager.WifiLock mWifiLock = null;
 	private PowerManager.WakeLock mWakeLock = null;
 	private final IBinder mBinder = new LocalBinder();
-	public boolean done = false;
+	public boolean mDone = false;
 
-	public class LocalBinder extends Binder
-	{
+	public class LocalBinder extends Binder {
 		HttpService getService()
 		{
 			return HttpService.this;
@@ -65,38 +71,36 @@ public class HttpService extends Service // <--Turtle stuff...
 	}
 
 	@Override
-	public IBinder onBind(Intent arg0)
-	{
-		Log.d("my", "service bind");
+	public IBinder onBind(Intent arg0) {
+		Log.d("wdSrv", "service bind");
 		return mBinder;
 	}
 
 	@Override
-	public boolean onUnbind(Intent intent)
-	{
-		Log.d("my", "service onUnbind");
+	public boolean onUnbind(Intent intent) {
+		Log.d("wdSrv", "service onUnbind");
 		return super.onUnbind(intent);
 	}
 
 	@Override
 	public void onCreate()
 	{
-		Log.d("my", "service creat");
+		Log.d("wdSrv", "service creat");
 	}
 
 	@Override
 	public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-		Log.d("my", "service start  - http server start");
+		Log.d("wdSrv", "service start  - http server start");
 		boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
 		File wwwRoot = new File(wholeStorage ? "/storage" : getApplicationContext().getExternalFilesDir(null).getAbsolutePath());
 		rootDir = wwwRoot.getAbsolutePath();
 
 		// ref http://stackoverflow.com/questions/8897535/android-socket-gets-killed-imidiatelly-after-screen-goes-blank/18916511#18916511
 		WifiManager wMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-		if (mWifiLock == null)
+		if (mWifiLock == null) {
 			mWifiLock = wMgr.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "com.hyperionics.webdavserver:MyWifiLock");
-		if (mWifiLock != null && !mWifiLock.isHeld())
-			mWifiLock.acquire();
+			mWifiLock.setReferenceCounted(false);
+		}
 
 		PowerManager pMgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		if (mWakeLock == null)
@@ -104,15 +108,40 @@ public class HttpService extends Service // <--Turtle stuff...
 		if (mWakeLock != null && !mWakeLock.isHeld())
 			mWakeLock.acquire();
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			NotificationChannel serviceChannel = new NotificationChannel(
+					CHANNEL_ID,
+					"WebDAV Server",
+					NotificationManager.IMPORTANCE_LOW
+			);
+			serviceChannel.setSound(null, null);
+			serviceChannel.setShowBadge(false);
+			NotificationManager manager = getSystemService(NotificationManager.class);
+			manager.createNotificationChannel(serviceChannel);
+		}
+		Intent notificationIntent = new Intent(this, ServerSettingsActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this,
+				0, notificationIntent, 0);
+		Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+				.setContentTitle(getString(R.string.wds_app_name))
+				.setContentText(getString(R.string.srv_running))
+				.setSmallIcon(R.drawable.ic_clip)
+				.setContentIntent(pendingIntent)
+				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+				.setCategory(NotificationCompat.CATEGORY_SERVICE)
+				.setOngoing(true)
+				.build();
+		startForeground(1, notification);
+
 		(new connect_clinet()).start(); // Start http service
-		return START_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d("my", "service destroy");
-		done = true;
+		Log.d("wdSrv", "service destroy");
+		mDone = true;
 
 		// Close the server service
 		try
@@ -124,23 +153,21 @@ public class HttpService extends Service // <--Turtle stuff...
 		{
 			e.printStackTrace();
 		}
-		if (mWifiLock != null && mWifiLock.isHeld() )
-			mWifiLock.release();
 		if (mWakeLock != null && mWakeLock.isHeld())
 			mWakeLock.release();
 	}
 
-	// ------------------------------------------------
 	private ServerSocket mServer = null;
 
-	// Write dead first
 	private String rootDir = "";
 
 	class connect_clinet extends Thread {
 		public int mUsePort = getSharedPreferences("WebDav", MODE_PRIVATE).getInt("port", 8080);
 
-		public void run()
-		{
+		public void run() {
+			if (mWifiLock != null && !mWifiLock.isHeld()) {
+				mWifiLock.acquire();
+			}
 
 			Socket connected;
 
@@ -150,7 +177,7 @@ public class HttpService extends Service // <--Turtle stuff...
 			}
 			catch (IOException e1)
 			{
-				Log.e("my", e1.toString());
+				Log.e("wdSrv", e1.toString());
 			}
 
 			try
@@ -159,7 +186,7 @@ public class HttpService extends Service // <--Turtle stuff...
 			}
 			catch (SocketException e1)
 			{
-				Log.e("my", e1.toString());
+				Log.e("wdSrv", e1.toString());
 			}
 
 			try
@@ -168,10 +195,10 @@ public class HttpService extends Service // <--Turtle stuff...
 			}
 			catch (IOException e1)
 			{
-				Log.e("my", e1.toString());
+				Log.e("wdSrv", e1.toString());
 			}
 
-			while (!done)
+			while (!mDone)
 			{
 				try
 				{
@@ -180,11 +207,15 @@ public class HttpService extends Service // <--Turtle stuff...
 				}
 				catch (IOException e)
 				{
-					Log.e("my", e.toString());
+					Log.e("wdSrv", e.toString());
+					e.printStackTrace();
 				}
 			}
+			if (mWifiLock != null && mWifiLock.isHeld()) {
+				mWifiLock.release(); // this takes about 4 seconds on Android 11, run in background thread
+			}
 
-			Log.d("my", "http server close");
+			Log.d("wdSrv", "http server close");
 		}
 	}
 
@@ -223,8 +254,8 @@ public class HttpService extends Service // <--Turtle stuff...
 							nl = false;
 					}
 					requestStr = new String(bStream.toByteArray(), "UTF-8");
-					Log.d("my", "requestStr length: " + requestStr.length());
-					Log.d("my", "requestStr:\n" + requestStr);
+					Log.d("wdSrv", "requestStr length: " + requestStr.length());
+					Log.d("wdSrv", "requestStr:\n" + requestStr);
 				}
 
 				// header analysis area start
@@ -232,11 +263,11 @@ public class HttpService extends Service // <--Turtle stuff...
 				try
 				{
 					firstline = requestStr.substring(0, requestStr.indexOf("\r\n"));
-					Log.d("my", "firstLine: [" + firstline + "]");
+					Log.d("wdSrv", "firstLine: [" + firstline + "]");
 				}
 				catch (Exception ex)
 				{
-					Log.e("my", "Exceptions in requestStr.substring(): ", ex);
+					Log.e("wdSrv", "Exceptions in requestStr.substring(): ", ex);
 					ex.printStackTrace();
 					connectedClient.close();
 					return;
@@ -251,7 +282,7 @@ public class HttpService extends Service // <--Turtle stuff...
 				HashMap<String, String> headerList = new HashMap();
 				for (String i : requestHeaderStr.split("\r\n"))
 				{
-					Log.d("my", "h : [" + i + "]");
+					Log.d("wdSrv", "h : [" + i + "]");
 					headerList.put(i.substring(0, i.indexOf(": ")), i.substring(i.indexOf(": ") + 2));
 				}
 
@@ -323,7 +354,7 @@ public class HttpService extends Service // <--Turtle stuff...
 							break;
 					}
 					String patchStr = new String(bStream.toByteArray(), "UTF-8");
-					Log.d("my", "patchStr:\n" + patchStr);
+					Log.d("wdSrv", "patchStr:\n" + patchStr);
 					/*
 					Sample patchStr:
 					<?xml version="1.0" encoding="utf-8" ?><D:propertyupdate xmlns:D="DAV:" xmlns:srtns="http://www.southrivertech.com/"><D:set><D:prop><srtns:srt_modifiedtime>2019-06-04T15:42:53Z</srtns:srt_modifiedtime><srtns:srt_creationtime>2021-01-02T22:33:15Z</srtns:srt_creationtime><srtns:srt_proptimestamp>2021-01-02T17:33:15Z</srtns:srt_proptimestamp></D:prop></D:set></D:propertyupdate>
@@ -339,7 +370,7 @@ public class HttpService extends Service // <--Turtle stuff...
 							targetFile.setLastModified(ms);
 						}
 					} catch (Exception ex) {
-						Log.e("my", "Exception in set mod time: " + ex);
+						Log.e("wdSrv", "Exception in set mod time: " + ex);
 						ex.printStackTrace();
 					}
 					headersString = http_ver + " 200 OK\r\n";
@@ -398,8 +429,8 @@ public class HttpService extends Service // <--Turtle stuff...
 
 					targetFile.renameTo(to_file);
 
-					Log.d("my", from);
-					Log.d("my", to);
+					Log.d("wdSrv", from);
+					Log.d("wdSrv", to);
 
 					headersString = http_ver + " 201 Created\r\n\r\n";
 					connectedClient.getOutputStream().write(headersString.getBytes());
@@ -444,7 +475,7 @@ public class HttpService extends Service // <--Turtle stuff...
 				if (requestMethod.equals("MKCOL")) {
 					File check_dir = new File(rootDir + requestTarget);
 
-					Log.d("my", "mkcol debug :  " + rootDir + requestTarget);
+					Log.d("wdSrv", "mkcol debug :  " + rootDir + requestTarget);
 
 					if (!check_dir.exists())
 					{
@@ -603,7 +634,7 @@ public class HttpService extends Service // <--Turtle stuff...
 					// http://stackoverflow.com/questions/4412848/xml-node-to-string-in-java
 					String xmlbody_str = nodeToString(doc.getDocumentElement());
 
-					// Log.d("my", xmlbody_str);
+					// Log.d("wdSrv", xmlbody_str);
 
 					body = xmlbody_str.getBytes();
 					headersString = http_ver + " " + "207 Multi-Status" + "\r\n";
@@ -666,7 +697,7 @@ public class HttpService extends Service // <--Turtle stuff...
 										os.write(body, 0, nBytes);
 									}
 								} catch (IOException iox) {
-									Log.e("my", "Exception in GET: ", iox);
+									Log.e("wdSrv", "Exception in GET: ", iox);
 									iox.printStackTrace();
 								}
 							}
@@ -712,7 +743,7 @@ public class HttpService extends Service // <--Turtle stuff...
 					return;
 				}
 
-				Log.e("my", "Unknown method: " + requestMethod);
+				Log.e("wdSrv", "Unknown method: " + requestMethod);
 				headersString = http_ver + " 200 OK\r\n";
 				headersString += "\r\n";
 				connectedClient.getOutputStream().write(headersString.getBytes());
@@ -721,7 +752,7 @@ public class HttpService extends Service // <--Turtle stuff...
 			}
 			catch (IOException e)
 			{
-				Log.e("my", "Exception in client_deal run(): ", e);
+				Log.e("wdSrv", "Exception in client_deal run(): ", e);
 				e.printStackTrace();
 			}
 		}

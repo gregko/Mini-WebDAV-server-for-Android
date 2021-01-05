@@ -9,4 +9,5 @@
     <string name="wds_withdraw_perm">You may withdraw manage all files permission now.</string>
     <string name="wds_storage_perm">This app needs access to the storage on this device. Please allow access to external storage.</string>
     <string name="wds_approve_perm">You have previously declined this permission.\nYou must approve it in the \"Permissions\" of the app settings on your device.</string>
+    <string name="srv_running">"Server is running"</string>
 </resources>
