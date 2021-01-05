@@ -35,7 +35,7 @@ command:
 
     debugImplementation project(':WdServerLib')
     
-therefor does not have any permissions when built in RELEASE mode, it
+therefore it does not have any permissions when built in RELEASE mode, it
 pulls WdServerLib only when built in DEBUG mode. Then make yourself a discrete debug only button
 or menu item to start the Mini WebDAV Server settings activity:
 
@@ -43,6 +43,12 @@ or menu item to start the Mini WebDAV Server settings activity:
                     intent.setClassName(MainActivity.this,
                             "com.hyperionics.wdserverlib.ServerSettingsActivity");
                     startActivity(intent);
+
+The service may need a permanent notification when running, something to consider. Also, when run on
+Android 10 and lower with access to the full storage, the files and folders on an additional SD card
+are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new in Android 11. On 
+Android 10 and lower managing files there would be possible with scoped storage operations, after the
+user approves access to directories. Again, something to consider later.
 
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
