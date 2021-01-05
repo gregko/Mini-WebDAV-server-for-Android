@@ -28,6 +28,17 @@ even declare it to have MANAGE_EXTERNAL_STORAGE permission under Android 11 and 
 ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION intent action accordingly. Even this would not give a
 generic file manager access to any app app private directory though.
 
+## Update 1/4/2021
+
+Created WdServerLib library module, and a trivial test app. The app does not have any permissions
+and pulls WdServerLib only when built in DEBUG mode. Then make yourself a discrete debug only button
+or menu item to start the Mini WebDAV Server settings activity:
+
+                    Intent intent = new Intent();
+                    intent.setClassName(MainActivity.this,
+                            "com.hyperionics.wdserverlib.ServerSettingsActivity");
+                    startActivity(intent);
+
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
 
