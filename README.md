@@ -44,7 +44,7 @@ or menu item to start the Mini WebDAV Server settings activity:
                             "com.hyperionics.wdserverlib.ServerSettingsActivity");
                     startActivity(intent);
 
-The service may need a permanent notification when running, something to consider. Also, when run on
+When run on
 Android 10 and lower with access to the full storage, the files and folders on an additional SD card
 are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new in Android 11. On 
 Android 10 and lower managing files there would be possible with scoped storage operations, after the
