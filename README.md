@@ -2,7 +2,7 @@
 
 I originally cloned this from https://github.com/erspicu/Baxermux.server.http, however there
 was so much to change, fix, enhance, that I finally created a new Android app project, copied
-code fragments Baxermux and continued from there.
+code fragments from Baxermux and continued from there.
 
 Why I needed it: in Android 11 and higher the app private directories under 
 
@@ -27,14 +27,13 @@ command:
 
     debugImplementation project(':WdServerLib')
     
-therefore it does not have any permissions when built in RELEASE mode, it
+therefore it does not need any extra permissions when built in RELEASE mode, it
 pulls WdServerLib only when built in DEBUG mode. 
 
-When run on
-Android 10 and lower with access to the full storage, the files and folders on an additional SD card
-are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new in Android 11. On 
+When run on Android 10 and lower with access to the full storage, the files and folders on an additional
+SD card are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new in Android 11. On 
 Android 10 and lower managing files there would be possible with scoped storage operations, after the
-user approves access to directories. Again, something to consider later.
+user approves access to directories. Something to consider later.
 
 ## Adding to existing project from jippack
 
@@ -56,13 +55,13 @@ Add the dependency
 Then make yourself a discrete debug only button or menu item (or as I did - a long press action...)
 to start the Mini WebDAV Server settings activity:
 
-                    Intent intent = new Intent();
-                    intent.setClassName(MainActivity.this,
+        Intent intent = new Intent();
+        intent.setClassName(MainActivity.this,
                             "com.hyperionics.wdserverlib.ServerSettingsActivity");
-                    startActivity(intent);
+        startActivity(intent);
 
-Hope it will be useful to other developers as well. I don't recommend making a consumer product from
-this, the security issues would need serious consideration.
+That's all! Hope it will be useful to other developers as well. I don't recommend making a consumer product from
+this - the security issues would need serious consideration.
 
 <p align="center">
 <img src="images/screenshot.png" >
