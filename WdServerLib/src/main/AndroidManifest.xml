@@ -11,9 +11,11 @@
 
     <application
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/Theme.WebDavServer">
+        >
 
-        <activity android:name=".ServerSettingsActivity"/>
+        <activity android:name=".ServerSettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            />
 
         <service
             android:name=".HttpService"

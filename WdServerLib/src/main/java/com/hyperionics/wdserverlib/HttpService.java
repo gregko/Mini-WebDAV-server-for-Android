@@ -55,7 +55,7 @@ import javax.xml.transform.stream.StreamResult;
 // http://developer.android.com/reference/android/app/Service.html#LocalServiceSample
 // http://www.techotopia.com/index.php/Android_Local_Bound_Services_%E2%80%93_A_Worked_Example
 
-public class HttpService extends Service // <--Turtle stuff...
+public class HttpService extends Service
 {
 	public static final String CHANNEL_ID = "WebDAVServiceChannel";
 	private WifiManager.WifiLock mWifiLock = null;
@@ -547,7 +547,9 @@ public class HttpService extends Service // <--Turtle stuff...
 						else
 							ff = new ArrayList<>();
 						if (requestTarget.endsWith("/Android/data/")) {
-							ff.add(new File(targetFile.getAbsolutePath() + "/" + getApplicationContext().getPackageName()));
+							File appDir = new File(targetFile.getAbsolutePath() + "/" + getApplicationContext().getPackageName());
+							if (ff.indexOf(appDir) < 0)
+								ff.add(appDir);
 						}
 						else if ("/storage".equals(targetFile.getAbsolutePath())) {
 							ff = getVolumeDirs();
