@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode=VERSION_CODE
-        versionName="\"" + VERSION_NAME + "\""
+        versionCode=10400 //VERSION_CODE
+        versionName="1.4.0" //"\"" + VERSION_NAME + "\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
