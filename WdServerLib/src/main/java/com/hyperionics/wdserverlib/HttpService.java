@@ -96,8 +96,8 @@ public class HttpService extends Service
 		rootDir = wwwRoot.getAbsolutePath();
 
 		// ref http://stackoverflow.com/questions/8897535/android-socket-gets-killed-imidiatelly-after-screen-goes-blank/18916511#18916511
-		WifiManager wMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 		if (mWifiLock == null) {
+			WifiManager wMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 			mWifiLock = wMgr.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "com.hyperionics.webdavserver:MyWifiLock");
 			mWifiLock.setReferenceCounted(false);
 		}
@@ -212,7 +212,7 @@ public class HttpService extends Service
 				}
 			}
 			if (mWifiLock != null && mWifiLock.isHeld()) {
-				mWifiLock.release(); // this takes about 4 seconds on Android 11, run in background thread
+				mWifiLock.release();
 			}
 
 			Log.d("wdSrv", "http server close");
