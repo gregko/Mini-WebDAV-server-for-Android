@@ -50,6 +50,23 @@ are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new i
 Android 10 and lower managing files there would be possible with scoped storage operations, after the
 user approves access to directories. Again, something to consider later.
 
+## Adding to existing project from jippack
+
+Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+Add the dependency
+
+	dependencies {
+	        debugImplementation 'com.github.gregko:Mini-WebDAV-server-for-Android:v1.4.0'
+	}
+
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
 
