@@ -22,25 +22,13 @@ excellent WebDrive product - it mounts the directory exported by the Mini WebDAV
 Windows drive, and I can use the native Windows File Explorer, or command prompt, can view and
 edit the files as if they were local to my computer.
 
-The root of this Mini WebDAV server is set to app private folder, however a developer could change
-it, even set to /sdcard or /storage/emulated/0 and give the app appropriate permissions, maybe 
-even declare it to have MANAGE_EXTERNAL_STORAGE permission under Android 11 and handle 
-ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION intent action accordingly. Even this would not give a
-generic file manager access to any app app private directory though.
-
 The project contains WdServerLib library module, and a trivial test app. The app pulls the library via build.gradle
 command:
 
     debugImplementation project(':WdServerLib')
     
 therefore it does not have any permissions when built in RELEASE mode, it
-pulls WdServerLib only when built in DEBUG mode. Then make yourself a discrete debug only button
-or menu item (or as I did - a long press action...) to start the Mini WebDAV Server settings activity:
-
-                    Intent intent = new Intent();
-                    intent.setClassName(MainActivity.this,
-                            "com.hyperionics.wdserverlib.ServerSettingsActivity");
-                    startActivity(intent);
+pulls WdServerLib only when built in DEBUG mode. 
 
 When run on
 Android 10 and lower with access to the full storage, the files and folders on an additional SD card
@@ -64,6 +52,14 @@ Add the dependency
 	dependencies {
 	        debugImplementation 'com.github.gregko:Mini-WebDAV-server-for-Android:v1.4.0'
 	}
+
+Then make yourself a discrete debug only button or menu item (or as I did - a long press action...)
+to start the Mini WebDAV Server settings activity:
+
+                    Intent intent = new Intent();
+                    intent.setClassName(MainActivity.this,
+                            "com.hyperionics.wdserverlib.ServerSettingsActivity");
+                    startActivity(intent);
 
 Hope it will be useful to other developers as well. I don't recommend making a consumer product from
 this, the security issues would need serious consideration.
