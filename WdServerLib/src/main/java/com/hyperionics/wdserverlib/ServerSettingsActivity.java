@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -28,6 +30,9 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 
 import com.hyperionics.wdserverlib.BuildConfig;
+
+import org.w3c.dom.Text;
+
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -38,7 +43,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
     //region Fields
     private static final int RESULT_MANAGE_ALL_FILES = 101;
     private static final int RESULT_EXT_STORAGE = 102;
-    TextView mIpStatusText;
+    TextView mIpStatusText, mHelpText;
     Switch mServerSwitch, mAllStorageSwitch;
     EditText mPortEdit;
     //endregion
@@ -59,6 +64,20 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
         mPortEdit = findViewById(R.id.portNo);
         int portNo = getSharedPreferences("WebDav", MODE_PRIVATE).getInt("port", 8080);
         mPortEdit.setText(Integer.toString(portNo));
+        mPortEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mHelpText.setText(getString(R.string.wds_adb_help).replace("%port", s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+        mHelpText = findViewById(R.id.help_txt);
+        mHelpText.setText(getString(R.string.wds_adb_help).replace("%port", Integer.toString(portNo)));
         boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
         if (wholeStorage && !isExternalStorageManager()) {
             wholeStorage = false;

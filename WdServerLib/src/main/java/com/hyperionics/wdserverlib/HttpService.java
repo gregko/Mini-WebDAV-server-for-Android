@@ -57,11 +57,14 @@ import javax.xml.transform.stream.StreamResult;
 
 public class HttpService extends Service
 {
+	//region Fields
 	public static final String CHANNEL_ID = "WebDAVServiceChannel";
 	private WifiManager.WifiLock mWifiLock = null;
 	private PowerManager.WakeLock mWakeLock = null;
 	private final IBinder mBinder = new LocalBinder();
+	private File mDataDir;
 	public boolean mDone = false;
+	//endregion
 
 	public class LocalBinder extends Binder {
 		HttpService getService()
@@ -92,8 +95,9 @@ public class HttpService extends Service
 	public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 		Log.d("wdSrv", "service start  - http server start");
 		boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
+		mDataDir = getFilesDir().getParentFile();
 		File wwwRoot = new File(wholeStorage ? "/storage" : getApplicationContext().getExternalFilesDir(null).getAbsolutePath());
-		rootDir = wwwRoot.getAbsolutePath();
+		mRootDir = wwwRoot.getAbsolutePath();
 
 		// ref http://stackoverflow.com/questions/8897535/android-socket-gets-killed-imidiatelly-after-screen-goes-blank/18916511#18916511
 		if (mWifiLock == null) {
@@ -159,7 +163,7 @@ public class HttpService extends Service
 
 	private ServerSocket mServer = null;
 
-	private String rootDir = "";
+	private String mRootDir = "";
 
 	class connect_clinet extends Thread {
 		public int mUsePort = getSharedPreferences("WebDav", MODE_PRIVATE).getInt("port", 8080);
@@ -284,6 +288,10 @@ public class HttpService extends Service
 				{
 					Log.d("wdSrv", "h : [" + i + "]");
 					headerList.put(i.substring(0, i.indexOf(": ")), i.substring(i.indexOf(": ") + 2));
+				}
+				String rootDir = mRootDir;
+				if (rootDir.equals("/storage") && requestTarget.startsWith("/" + getApplicationContext().getPackageName())) {
+					rootDir = mDataDir.getParent();
 				}
 
 				if (requestMethod.equals("PUT")) {
@@ -527,6 +535,11 @@ public class HttpService extends Service
 					int th = 0;
 
 					ArrayList<File> ff;
+//					if (targetFile.getAbsolutePath().startsWith("/storage/" + getApplicationContext().getPackageName())) {
+//						String s = targetFile.getAbsolutePath();
+//						s = mDataDir.getParent() + s.substring(8);
+//						targetFile = new File(s);
+//					}
 					if ("/storage/emulated".equals(targetFile.getAbsolutePath())) {
 						File[] fa = getVolumeDirs().get(0).getParentFile().listFiles();
 						if (fa != null && fa.length > 0) {
@@ -555,6 +568,8 @@ public class HttpService extends Service
 							ff = getVolumeDirs();
 							if (ff.get(0).getAbsolutePath().contains("/emulated/0"))
 								ff.set(0, ff.get(0).getParentFile());
+							// data dir is like  /data/user/0/com.hyperionics.webdavserver
+							ff.add(new File(mDataDir.getAbsolutePath().replace('/', '_')));
 						}
 					}
 					else {
@@ -563,6 +578,9 @@ public class HttpService extends Service
 					}
 					if (ff != null) {
 						for (File file_obj : ff) {
+							if (file_obj.getAbsolutePath().substring(1).replace('_', '/').equals(mDataDir.getAbsolutePath())) {
+								file_obj = mDataDir;
+							}
 							if (file_obj.isFile()) {
 								// Process regular file
 								rootElement.appendChild(doc.createElement("D:response"));
@@ -793,9 +811,10 @@ public class HttpService extends Service
 				if (n > 0) {
 					path = path.substring(0, n);
 					File f = new File(path);
-					volDirs.add(f); // volDirs[i].getParentFile().getParentFile().getParentFile().getParentFile();
+					volDirs.add(f);
 				}
 			}
+			// volDirs.add(mDataDir); // data dir is like  /data/user/0/com.hyperionics.webdavserver
 			return volDirs;
 		}
 	}
