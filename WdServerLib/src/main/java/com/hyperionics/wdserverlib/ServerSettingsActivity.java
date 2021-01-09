@@ -116,7 +116,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
 
     private boolean isExternalStorageManager() {
         if (Build.VERSION.SDK_INT < 30)
-            return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            return EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         else
             return Environment.isExternalStorageManager();
     }
@@ -130,7 +130,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
                 setWholeStorage(true);
             }
             else {
-                if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     Log.d(TAG, "Enable storage access...");
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.wds_approve_perm,
                             Snackbar.LENGTH_LONG).setAction(R.string.wds_action_settings, new View.OnClickListener() {

@@ -2,8 +2,8 @@ plugins {
     id 'com.android.library'
 }
 
-def VERSION_CODE = 10502
-def VERSION_NAME = "1.5.2"
+def VERSION_CODE = 10503
+def VERSION_NAME = "1.5.3"
 
 android {
     publishNonDefault true
