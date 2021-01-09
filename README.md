@@ -18,12 +18,12 @@ files and directories (with names starting with a dot), which I need to manage t
 
 Decided to resurrect this WebDAV server and make it a part of my app, at least in the DEBUG mode.
 Now I can access these folders, using any WebDAV client. On my Windows development host I use the
-excellent WebDrive product - it mounts the directory exported by the Mini WebDAV server as 
-Windows drive, and I can use the native Windows File Explorer, or command prompt, can view and
+excellent WebDrive product - it mounts the directory exported by the Mini WebDAV server as a
+Windows virtual drive, and I can use the native Windows File Explorer, or command prompt, can view and
 edit the files as if they were local to my computer.
 
-The project contains WdServerLib library module, and a trivial test app. The app pulls the library via build.gradle
-command:
+The project contains WdServerLib library module, and a trivial test app. The app pulls the library 
+via the build.gradle command:
 
     debugImplementation project(':WdServerLib')
     
@@ -31,9 +31,9 @@ therefore it does not need any extra permissions when built in RELEASE mode, it
 pulls WdServerLib only when built in DEBUG mode. 
 
 When run on Android 10 and lower with access to the full storage, the files and folders on an additional
-SD card are read-only. It works fine on Android 11 due to MANAGE_EXTERNAL_STORAGE, new in Android 11. On 
-Android 10 and lower managing files there would be possible with scoped storage operations, after the
-user approves access to directories. Something to consider later.
+SD card are read-only. They are read-wrie on Android 11 due to the new MANAGE_EXTERNAL_STORAGE permission,
+available in Android 11. On Android 10 and lower managing files there would be possible with scoped
+storage operations, after the user approves access to directories. Something to consider later.
 
 ## Adding to existing project from jippack
 
