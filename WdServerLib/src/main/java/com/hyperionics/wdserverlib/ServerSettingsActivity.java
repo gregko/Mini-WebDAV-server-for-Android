@@ -226,6 +226,22 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        // Fix memory leak:
+        // Description: Android Q added a new android.app.IRequestFinishCallback$Stub class.
+        // android.app.Activity creates an implementation of that interface as an anonymous subclass.
+        // That anonymous subclass has a reference to the activity. Another process is keeping the
+        // android.app.IRequestFinishCallback$Stub reference alive long after Activity.onDestroyed()
+        // has been called, causing the activity to leak.Fix: You can "fix" this leak by overriding
+        // Activity.onBackPressed() and calling Activity.finishAfterTransition(); instead of super
+        // if the activity is task root and the fragment stack is empty.
+        // Tracked here: https://issuetracker.google.com/issues/139738913
+
+        finishAfterTransition();
+        //super.onBackPressed();
+    }
+
     private void savePort() {
         String s = mPortEdit.getText().toString();
         int portNo = 8080;
