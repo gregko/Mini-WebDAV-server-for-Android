@@ -32,7 +32,7 @@ import com.google.android.material.snackbar.Snackbar;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
+import static com.hyperionics.wdserverlib.HttpService.TAG;
 
 public class ServerSettingsActivity extends AppCompatActivity implements EasyPermissions.RationaleCallbacks
 {
@@ -131,7 +131,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
             }
             else {
                 if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    Log.d("wdSrv", "Enable storage access...");
+                    Log.d(TAG, "Enable storage access...");
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.wds_approve_perm,
                             Snackbar.LENGTH_LONG).setAction(R.string.wds_action_settings, new View.OnClickListener() {
                         @Override
@@ -168,7 +168,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
     @Override
     public void onRationaleDenied(int requestCode) {
         mAllStorageSwitch.setChecked(false);
-        Log.d("wdSrv", "Storage rationale denied");
+        Log.d(TAG, "Storage rationale denied");
     }
     //endregion
 
@@ -264,7 +264,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
         {
             if (HttpService.class.getName().equals(service.service.getClassName()))
             {
-                Log.i("wdSrv", "service already running...");
+                Log.i(TAG, "service already running...");
                 return true;
             }
         }

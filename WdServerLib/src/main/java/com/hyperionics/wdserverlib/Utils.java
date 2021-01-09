@@ -11,6 +11,8 @@ import java.nio.channels.FileChannel;
 import java.util.Collections;
 import java.util.List;
 
+import static com.hyperionics.wdserverlib.HttpService.TAG;
+
 public class Utils
 {
 	// Copy files
@@ -113,7 +115,7 @@ public class Utils
 		}
 		catch (Exception ex)
 		{
-			Log.e("wdSrv", "Exception in getIPAddress(): " + ex);
+			Log.e(TAG, "Exception in getIPAddress(): " + ex);
 			ex.printStackTrace();
 		}
 		return "";
