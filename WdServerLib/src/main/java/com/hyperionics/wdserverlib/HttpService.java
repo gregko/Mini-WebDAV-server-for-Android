@@ -102,13 +102,13 @@ public class HttpService extends Service
 		// ref http://stackoverflow.com/questions/8897535/android-socket-gets-killed-imidiatelly-after-screen-goes-blank/18916511#18916511
 		if (mWifiLock == null) {
 			WifiManager wMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-			mWifiLock = wMgr.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "com.hyperionics.webdavserver:MyWifiLock");
+			mWifiLock = wMgr.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, getApplicationContext().getPackageName() + ":MyWifiLock");
 			mWifiLock.setReferenceCounted(false);
 		}
 
 		PowerManager pMgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		if (mWakeLock == null)
-			mWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.hyperionics.webdavserver:MyWakeLock");
+			mWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getApplicationContext().getPackageName() + ":MyWakeLock");
 		if (mWakeLock != null && !mWakeLock.isHeld())
 			mWakeLock.acquire();
 

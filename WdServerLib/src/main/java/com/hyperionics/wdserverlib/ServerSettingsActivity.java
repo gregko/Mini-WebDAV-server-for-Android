@@ -29,10 +29,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import com.hyperionics.wdserverlib.BuildConfig;
-
-import org.w3c.dom.Text;
-
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
