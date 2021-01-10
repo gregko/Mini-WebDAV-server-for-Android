@@ -51,6 +51,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import static com.hyperionics.wdserverlib.Utils.localToGMT;
+
 // local service program reference
 // http://developer.android.com/reference/android/app/Service.html#LocalServiceSample
 // http://www.techotopia.com/index.php/Android_Local_Bound_Services_%E2%80%93_A_Worked_Example
@@ -596,7 +598,9 @@ public class HttpService extends Service
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).appendChild(doc.createElement("D:status"));
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(0)
 										.setTextContent("HTTP/1.1 200 OK");
-								String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z").format(file_obj.lastModified());
+
+								String modTime = localToGMT(file_obj.lastModified());
+								//String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss z").format(file_obj.lastModified());
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
 										.appendChild(doc.createElement("D:creationdate"));
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1)
@@ -629,7 +633,8 @@ public class HttpService extends Service
 										.setTextContent("HTTP/1.1 200 OK");
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
 										.appendChild(doc.createElement("D:creationdate"));
-								String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z").format(file_obj.lastModified());
+								String modTime = localToGMT(file_obj.lastModified());
+								//String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss z").format(file_obj.lastModified());
 								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1)
 										.setTextContent(modTime);
 								//.setTextContent("2013-11-21T10:12:14:Z");// Preemptive death

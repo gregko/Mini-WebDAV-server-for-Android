@@ -8,13 +8,23 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static com.hyperionics.wdserverlib.HttpService.TAG;
 
 public class Utils
 {
+	public static String localToGMT(long millis) {
+		Date date = new Date(millis);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return sdf.format(date);
+	}
+
 	// Copy files
 	// http://herolin.twbbs.org/entry/java-copy-file-directory/
 	public static void copyFile(String srFile, String dtFile) {
