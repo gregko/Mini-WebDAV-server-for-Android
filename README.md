@@ -46,7 +46,7 @@ Add it in your root build.gradle at the end of repositories:
 		}
 	}
 
-Add the dependency
+Add the dependency your own app's build gradle:
 
 	dependencies {
 	        debugImplementation 'com.github.gregko:Mini-WebDAV-server-for-Android:v1.5.3'
