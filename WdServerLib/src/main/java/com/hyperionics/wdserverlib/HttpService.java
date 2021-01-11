@@ -189,7 +189,7 @@ public class HttpService extends Service
 
 			try
 			{
-				mServer.setReuseAddress(false);
+				mServer.setReuseAddress(true);
 			}
 			catch (SocketException e1)
 			{
@@ -215,7 +215,6 @@ public class HttpService extends Service
 				catch (IOException e)
 				{
 					Log.e(TAG, e.toString());
-					e.printStackTrace();
 				}
 			}
 			if (mWifiLock != null && mWifiLock.isHeld()) {
@@ -588,70 +587,47 @@ public class HttpService extends Service
 							}
 							if (file_obj.isFile()) {
 								// Process regular file
+								long lastModTime = file_obj.lastModified();
 								rootElement.appendChild(doc.createElement("D:response"));
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"));
+								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"))
+									.setTextContent(requestTarget + file_obj.getName());
 
-								rootElement.getChildNodes().item(th).getChildNodes().item(0).setTextContent(requestTarget + file_obj.getName());
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).appendChild(doc.createElement("D:prop"));
-
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).appendChild(doc.createElement("D:status"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(0)
+								Node n = rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
+								n = n.appendChild(doc.createElement("D:prop"));
+								n.appendChild(doc.createElement("D:status"))
 										.setTextContent("HTTP/1.1 200 OK");
-
-								String modTime = localToGMT(file_obj.lastModified());
-								//String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss z").format(file_obj.lastModified());
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:creationdate"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1)
+								String modTime = localToGMT(lastModTime);
+								n.appendChild(doc.createElement("D:creationdate"))
 										.setTextContent(modTime);
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:getlastmodified"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(2)
+								n.appendChild(doc.createElement("D:getlastmodified"))
 										.setTextContent(modTime);
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:resourcetype"));// index 3
-
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:getcontentlength")); // index 4
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(4)
+								n.appendChild(doc.createElement("D:resourcetype"));// index 3
+								n.appendChild(doc.createElement("D:getcontentlength")) // index 4
 										.setTextContent(String.valueOf(file_obj.length()));
 
 								th++;
 							}
 							else if (file_obj.isDirectory()) {
 								rootElement.appendChild(doc.createElement("D:response"));
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"));
+								long lastModTime = file_obj.lastModified();
+								String modTime = localToGMT(lastModTime);
 
-								rootElement.getChildNodes().item(th).getChildNodes().item(0).setTextContent(requestTarget + file_obj.getName() + "/");
+								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"))
+									.setTextContent(requestTarget + file_obj.getName() + "/");
 
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).appendChild(doc.createElement("D:prop"));
-								// ((Element) rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)).setAttributeNode(attr_prop);
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).appendChild(doc.createElement("D:status"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(0)
+								Node n = rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
+								n = n.appendChild(doc.createElement("D:prop"));
+								n.appendChild(doc.createElement("D:status"));
+								n.getChildNodes().item(0)
 										.setTextContent("HTTP/1.1 200 OK");
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:creationdate"));
-								String modTime = localToGMT(file_obj.lastModified());
-								//String modTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss z").format(file_obj.lastModified());
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1)
+								n.appendChild(doc.createElement("D:creationdate"))
 										.setTextContent(modTime);
-								//.setTextContent("2013-11-21T10:12:14:Z");// Preemptive death
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:getlastmodified"));
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(2)
+								n.appendChild(doc.createElement("D:getlastmodified"))
 										.setTextContent(modTime);
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:resourcetype"));// index 3
-
-								// for dir add
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(3)
+								n.appendChild(doc.createElement("D:resourcetype"))// index 3
 										.appendChild(doc.createElement("D:collection"));
 
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0)
-										.appendChild(doc.createElement("D:getcontentlength")); // index 4
-								rootElement.getChildNodes().item(th).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(4)
+								n.appendChild(doc.createElement("D:getcontentlength")) // index 4
 										.setTextContent(String.valueOf(file_obj.length()));
 
 								th++;
@@ -661,8 +637,7 @@ public class HttpService extends Service
 
 					// http://stackoverflow.com/questions/4412848/xml-node-to-string-in-java
 					String xmlbody_str = nodeToString(doc.getDocumentElement());
-
-					// Log.d(TAG, xmlbody_str);
+					//Log.d(TAG, xmlbody_str);
 
 					body = xmlbody_str.getBytes();
 					headersString = http_ver + " " + "207 Multi-Status" + "\r\n";
@@ -675,7 +650,6 @@ public class HttpService extends Service
 					connectedClient.getOutputStream().flush();
 					connectedClient.close();
 					return;
-
 				}
 
 				if (requestMethod.equals("GET")) {
