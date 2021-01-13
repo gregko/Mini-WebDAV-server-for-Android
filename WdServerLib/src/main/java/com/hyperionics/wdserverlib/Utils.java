@@ -20,8 +20,8 @@ public class Utils
 {
 	public static String localToGMT(long millis) {
 		Date date = new Date(millis);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return sdf.format(date);
 	}
 

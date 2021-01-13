@@ -1,0 +1,336 @@
+Sample responses from another WebDAV server (to learn more about WebDAV protocol syntax, hard to
+find all the details otherwise):
+
+<?xml version="1.0" encoding="utf-8" ?>
+<d:multistatus xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:cs="http://calendarserver.org/ns/"
+  xmlns:card="urn:ietf:params:xml:ns:carddav" xmlns:d="DAV:">
+    <d:response>
+        <d:href>/</d:href>
+
+        <d:propstat><d:prop>
+            <d:href>http://192.168.86.104:8080/</d:href>
+            <d:isreadonly>FALSE</d:isreadonly>
+            <d:lockdiscovery></d:lockdiscovery>
+            <d:resourcetype><d:collection/></d:resourcetype>
+            <d:getcontentlength/>
+            <d:getlastmodified>Tue, 12 Jan 2021 13:17:41 GMT</d:getlastmodified>
+            <d:creationdate/>
+        </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime/>
+                <srt_lastaccesstime/>
+                <srt_creationtime/>
+                <srt_proptimestamp/>
+                <d:collection/>
+                <d:ishidden/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>
+
+-----------------------------------------------------------------------------------
+
+HTTP/1.1 207 OK..Date: Tue, 12 Jan 2021 13:46:23 GMT..Content-Length: 12545..DAV: 1, 2..
+Content-Type: application/xml; charset=utf-8..Connection: keep-alive....
+<?xml version="1.0" encoding="utf-8" ?>
+<d:multistatus xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:card="urn:ietf:params:xml:ns:carddav"
+    xmlns:cs="http://calendarserver.org/ns/" xmlns:d="DAV:">
+    <d:response>
+        <d:href>/Books/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>http://192.168.86.104:8080/Books/</d:href>
+                <d:isreadonly>FALSE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype>
+                    <d:collection />
+                </d:resourcetype>
+                <d:getcontentlength />
+                <d:getetag>-1937214755_-210583754</d:getetag>
+                <d:getlastmodified>Mon, 11 Jan 2021 21:55:52 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+
+    <d:response>
+        <d:href>/Books/Biologia_przekonan.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>http://192.168.86.104:8080/Books/Biologia_przekonan.txt</d:href>
+                <d:isreadonly>TRUE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype />
+                <d:getcontentlength>809638</d:getcontentlength>
+                <d:getetag>126484402_1804543716</d:getetag>
+                <d:getlastmodified>Tue, 08 Sep 2020 02:32:58 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+
+    <d:response>
+        <d:href>/Books/Burmistrov_D._Imperiyamlechn1._Imperiya_Mlechnogo_Puti_K.bmk.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>
+                    http://192.168.86.104:8080/Books/Burmistrov_D._Imperiyamlechn1._Imperiya_Mlechnogo_Puti_K.bmk.txt
+                </d:href>
+                <d:isreadonly>TRUE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype />
+                <d:getcontentlength>806</d:getcontentlength>
+                <d:getetag>-87663953_-1511289137</d:getetag>
+                <d:getlastmodified>Tue, 14 Jan 2020 21:17:56 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+
+etc...
+
+---------------------------------------------------------------------------------------
+
+Example: directory
+
+HTTP/1.1 207 OK..Date: Tue, 12 Jan 2021 14:11:02 GMT..Content-Length: 873..DAV: 1, 2..
+  Content-Type: application/xml; charset=utf-8..Connection: keep-alive....
+<?xml version="1.0" encoding="utf-8" ?>.
+<d:multistatus xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:card="urn:ietf:params:xml:ns:carddav"
+    xmlns:cs="http://calendarserver.org/ns/" xmlns:d="DAV:">
+    <d:response>
+        <d:href>/Android/data/com.hyperionics.avar/files/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/</d:href>
+                <d:isreadonly>FALSE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype>
+                    <d:collection />
+                </d:resourcetype>
+                <d:getcontentlength />
+                <d:getlastmodified>Wed, 09 Dec 2020 12:00:49 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <srt_proptimestamp />
+                <d:collection />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>
+
+--------------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>.
+<d:multistatus xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:card="urn:ietf:params:xml:ns:carddav"
+    xmlns:cs="http://calendarserver.org/ns/" xmlns:d="DAV:">
+    <d:response>
+        <d:href>/Android/data/com.hyperionics.avar/files/eBooks/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/
+                </d:href>
+                <d:isreadonly>FALSE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype>
+                    <d:collection />
+                </d:resourcetype>
+                <d:getcontentlength />
+                <d:getetag>805303658_-113448266</d:getetag>
+                <d:getlastmodified>Wed, 13 Jan 2021 00:54:48 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>
+            /Android/data/com.hyperionics.avar/files/eBooks/Lose%20the%20Resume%20Land%20the%20Job.pdf.epub
+        </d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>
+                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/Lose%20the%20Resume%20Land%20the%20Job.pdf.epub
+                </d:href>
+                <d:isreadonly>TRUE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype />
+                <d:getcontentlength>6579572</d:getcontentlength>
+                <d:getetag>-565370811_-2001640843</d:getetag>
+                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/Android/data/com.hyperionics.avar/files/eBooks/Const_Dem.pdf.epub</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>
+                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/Const_Dem.pdf.epub
+                </d:href>
+                <d:isreadonly>TRUE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype />
+                <d:getcontentlength>5783</d:getcontentlength>
+                <d:getetag>2113001049_-2001640843</d:getetag>
+                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>
+            /Android/data/com.hyperionics.avar/files/eBooks/AtlasShrugged%20Hebrew%20Small%20%2894873434%29.pdf.epub
+        </d:href>
+        <d:propstat>
+            <d:prop>
+                <d:href>
+                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/AtlasShrugged%20Hebrew%20Small%20%2894873434%29.pdf.epub
+                </d:href>
+                <d:isreadonly>TRUE</d:isreadonly>
+                <d:lockdiscovery></d:lockdiscovery>
+                <d:resourcetype />
+                <d:getcontentlength>102808</d:getcontentlength>
+                <d:getetag>192778072_-2001640843</d:getetag>
+                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
+                <d:creationdate />
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <srt_modifiedtime />
+                <d:Win32FileAttributes />
+                <srt_lastaccesstime />
+                <srt_creationtime />
+                <d:locktoken />
+                <srt_proptimestamp />
+                <d:BSI_isreadonly />
+                <d:activelock />
+                <d:collection />
+                <d:SRT_fileattributes />
+                <d:ishidden />
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>

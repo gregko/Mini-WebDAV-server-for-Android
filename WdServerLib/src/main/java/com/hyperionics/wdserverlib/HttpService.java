@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
@@ -35,6 +36,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +62,8 @@ import static com.hyperionics.wdserverlib.Utils.localToGMT;
 public class HttpService extends Service
 {
 	//region Fields
-	public static final String CHANNEL_ID = "WebDAVServiceChannel";
+	private static final String CHANNEL_ID = "WebDAVServiceChannel";
+	private static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?/~'%";
 	static final String TAG = "wdSrv";
 	private WifiManager.WifiLock mWifiLock = null;
 	private PowerManager.WakeLock mWakeLock = null;
@@ -203,6 +206,8 @@ public class HttpService extends Service
 			catch (IOException e1)
 			{
 				Log.e(TAG, e1.toString());
+				e1.printStackTrace();
+				return;
 			}
 
 			while (!mDone)
@@ -536,14 +541,7 @@ public class HttpService extends Service
 					doc.appendChild(rootElement);
 
 					// File processing flow
-					int th = 0;
-
 					ArrayList<File> ff;
-//					if (targetFile.getAbsolutePath().startsWith("/storage/" + getApplicationContext().getPackageName())) {
-//						String s = targetFile.getAbsolutePath();
-//						s = mDataDir.getParent() + s.substring(8);
-//						targetFile = new File(s);
-//					}
 					if ("/storage/emulated".equals(targetFile.getAbsolutePath())) {
 						File[] fa = getVolumeDirs().get(0).getParentFile().listFiles();
 						if (fa != null && fa.length > 0) {
@@ -580,69 +578,74 @@ public class HttpService extends Service
 						ff = new ArrayList<>(1);
 						ff.add(targetFile);
 					}
-					if (ff != null) {
-						for (File file_obj : ff) {
-							if (file_obj.getAbsolutePath().substring(1).replace('_', '/').equals(mDataDir.getAbsolutePath())) {
-								file_obj = mDataDir;
-							}
-							if (file_obj.isFile()) {
-								// Process regular file
-								long lastModTime = file_obj.lastModified();
-								rootElement.appendChild(doc.createElement("D:response"));
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"))
-									.setTextContent(requestTarget + file_obj.getName());
+					for (File file_obj : ff) {
+						if (file_obj.getAbsolutePath().substring(1).replace('_', '/').equals(mDataDir.getAbsolutePath()))
+							file_obj = mDataDir;
 
-								Node n = rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
-								n = n.appendChild(doc.createElement("D:prop"));
-								n.appendChild(doc.createElement("D:status"))
-										.setTextContent("HTTP/1.1 200 OK");
-								String modTime = localToGMT(lastModTime);
-								n.appendChild(doc.createElement("D:creationdate"))
-										.setTextContent(modTime);
-								n.appendChild(doc.createElement("D:getlastmodified"))
-										.setTextContent(modTime);
-								n.appendChild(doc.createElement("D:resourcetype"));// index 3
-								n.appendChild(doc.createElement("D:getcontentlength")) // index 4
-										.setTextContent(String.valueOf(file_obj.length()));
+						if (file_obj.exists()) {
+							boolean isDir = file_obj.isDirectory();
+							long lastModTime = file_obj.lastModified();
+							String modTime = localToGMT(lastModTime);
+							String filePath = requestTarget + file_obj.getName() + (isDir ? "/" : "");
+							String encPath = Uri.encode(filePath, ALLOWED_URI_CHARS);
 
-								th++;
-							}
-							else if (file_obj.isDirectory()) {
-								rootElement.appendChild(doc.createElement("D:response"));
-								long lastModTime = file_obj.lastModified();
-								String modTime = localToGMT(lastModTime);
-
-								rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:href"))
-									.setTextContent(requestTarget + file_obj.getName() + "/");
-
-								Node n = rootElement.getChildNodes().item(th).appendChild(doc.createElement("D:propstat"));
-								n = n.appendChild(doc.createElement("D:prop"));
-								n.appendChild(doc.createElement("D:status"));
-								n.getChildNodes().item(0)
-										.setTextContent("HTTP/1.1 200 OK");
-								n.appendChild(doc.createElement("D:creationdate"))
-										.setTextContent(modTime);
-								n.appendChild(doc.createElement("D:getlastmodified"))
-										.setTextContent(modTime);
-								n.appendChild(doc.createElement("D:resourcetype"))// index 3
+							Node respNode = rootElement.appendChild(doc.createElement("D:response"));
+							respNode.appendChild(doc.createElement("D:href"))
+								.setTextContent(encPath);
+							Node n = respNode.appendChild(doc.createElement("D:propstat"));
+							n.appendChild(doc.createElement("D:prop"));
+							n.appendChild(doc.createElement("D:status"))
+								.setTextContent("HTTP/1.1 200 OK");
+							n = n.getChildNodes().item(0); // n is prop node
+							n.appendChild(doc.createElement("d:href"))
+								.setTextContent("http://" + headerList.get("Host") + encPath);
+							n.appendChild(doc.createElement("D:creationdate")); // no available
+							n.appendChild(doc.createElement("D:getlastmodified"))
+									.setTextContent(modTime);
+							n.appendChild(doc.createElement("D:isreadonly"))
+									.setTextContent(file_obj.canWrite() ? "FALSE" : "TRUE");
+							n.appendChild(doc.createElement("d:lockdiscovery"));
+							n.appendChild(doc.createElement("D:getetag"))
+									.setTextContent(Long.toString(lastModTime));
+							if (isDir) {
+								n.appendChild(doc.createElement("D:resourcetype"))
 										.appendChild(doc.createElement("D:collection"));
-
-								n.appendChild(doc.createElement("D:getcontentlength")) // index 4
-										.setTextContent(String.valueOf(file_obj.length()));
-
-								th++;
+								n.appendChild(doc.createElement("D:getcontentlength"));
 							}
+							else {
+								n.appendChild(doc.createElement("D:resourcetype"));
+								n.appendChild(doc.createElement("D:getcontentlength"))
+										.setTextContent(String.valueOf(file_obj.length()));
+							}
+
+							/* These seem useless...
+							n = respNode.appendChild(doc.createElement("D:propstat"))
+									.appendChild(doc.createElement("D:prop"));
+							n.appendChild(doc.createElement("srt_modifiedtime"));
+							n.appendChild(doc.createElement("d:Win32FileAttributes"));
+							n.appendChild(doc.createElement("srt_lastaccesstime"));
+							n.appendChild(doc.createElement("d:locktoken"));
+							n.appendChild(doc.createElement("srt_proptimestamp"));
+							n.appendChild(doc.createElement("d:BSI_isreadonly"));
+							n.appendChild(doc.createElement("d:activelock"));
+							n.appendChild(doc.createElement("d:collection"));
+							n.appendChild(doc.createElement("d:SRT_fileattributes"));
+							n.appendChild(doc.createElement("d:ishidden"));
+							 */
 						}
 					}
 
 					// http://stackoverflow.com/questions/4412848/xml-node-to-string-in-java
 					String xmlbody_str = nodeToString(doc.getDocumentElement());
-					//Log.d(TAG, xmlbody_str);
+					Log.d(TAG, xmlbody_str);
 
 					body = xmlbody_str.getBytes();
-					headersString = http_ver + " " + "207 Multi-Status" + "\r\n";
-					headersString += "Content-Type: application/xml; charset=\"utf-8\"" + "\r\n";
+					headersString = http_ver + " 207 OK\r\n";
+					headersString += "Date: " + localToGMT(System.currentTimeMillis()) + "\r\n";
 					headersString += "Content-Length: " + String.valueOf(body.length) + "\r\n";
+					headersString += "DAV: 1, 2\r\n";
+					headersString += "Content-Type: application/xml; charset=\"utf-8\"\r\n";
+					headersString += "Connection: keep-alive\r\n";
 					headersString += "\r\n";
 
 					connectedClient.getOutputStream().write(headersString.getBytes());
@@ -719,7 +722,6 @@ public class HttpService extends Service
 							headersString += "\r\n";
 							connectedClient.getOutputStream().write(headersString.getBytes());
 						}
-
 					}
 					connectedClient.getOutputStream().flush();
 					connectedClient.close();
