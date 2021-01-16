@@ -35,6 +35,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -453,14 +454,14 @@ public class HttpService extends Service
 					n.appendChild(doc.createElement("D:status"))
 							.setTextContent("HTTP/1.1 200 OK");
 					n = n.getChildNodes().item(0); // n is prop node
-					n.appendChild(doc.createElement("d:href"))
+					n.appendChild(doc.createElement("D:href"))
 							.setTextContent("http://" + headerList.get("Host") + encPath);
 					n.appendChild(doc.createElement("D:creationdate")); // no available
 					n.appendChild(doc.createElement("D:getlastmodified"))
 							.setTextContent(modTime);
 					n.appendChild(doc.createElement("D:isreadonly"))
 							.setTextContent(file_obj.canWrite() ? "FALSE" : "TRUE");
-					n.appendChild(doc.createElement("d:lockdiscovery"));
+					n.appendChild(doc.createElement("D:lockdiscovery"));
 					n.appendChild(doc.createElement("D:getetag"))
 							.setTextContent(Long.toString(lastModTime));
 					if (isDir) {
@@ -478,15 +479,15 @@ public class HttpService extends Service
 							n = respNode.appendChild(doc.createElement("D:propstat"))
 									.appendChild(doc.createElement("D:prop"));
 							n.appendChild(doc.createElement("srt_modifiedtime"));
-							n.appendChild(doc.createElement("d:Win32FileAttributes"));
+							n.appendChild(doc.createElement("D:Win32FileAttributes"));
 							n.appendChild(doc.createElement("srt_lastaccesstime"));
-							n.appendChild(doc.createElement("d:locktoken"));
+							n.appendChild(doc.createElement("D:locktoken"));
 							n.appendChild(doc.createElement("srt_proptimestamp"));
-							n.appendChild(doc.createElement("d:BSI_isreadonly"));
-							n.appendChild(doc.createElement("d:activelock"));
-							n.appendChild(doc.createElement("d:collection"));
-							n.appendChild(doc.createElement("d:SRT_fileattributes"));
-							n.appendChild(doc.createElement("d:ishidden"));
+							n.appendChild(doc.createElement("D:BSI_isreadonly"));
+							n.appendChild(doc.createElement("D:activelock"));
+							n.appendChild(doc.createElement("D:collection"));
+							n.appendChild(doc.createElement("D:SRT_fileattributes"));
+							n.appendChild(doc.createElement("D:ishidden"));
 							 */
 				}
 				idx++;
@@ -605,58 +606,57 @@ public class HttpService extends Service
 		}
 
 		private void copy(String rootDir, String requestTarget, HashMap<String, String> headerList) throws  IOException {
-			String des = (String) headerList.get("Destination");
-			String from = rootDir + requestTarget;
-			String to = rootDir + URLDecoder.decode(des.substring(("http://" + (String) headerList.get("Host")).length()), "UTF-8");
+			String des = headerList.get("Destination");
+			if (des != null) {
+				String from = rootDir + requestTarget;
+				String to = rootDir + URLDecoder.decode(des.substring(("http://" + (String) headerList.get("Host")).length()), "UTF-8");
 
-			File targetFile = new File(from);
-			File to_file = new File(to);
-			File dir = to_file.isDirectory() ? to_file : to_file.getParentFile();
-			if (!dir.canWrite()) {
-				headersString = http_ver + " 403 Forbidden\r\n\r\n";
-				connectedClient.getOutputStream().write(headersString.getBytes());
-				connectedClient.close();
-				return;
-			}
+				File targetFile = new File(from);
+				File to_file = new File(to);
+				File dir = to_file.isDirectory() ? to_file : to_file.getParentFile();
+				if (dir.canWrite()) {
+					if (targetFile.isDirectory()) {
+						Utils.copyDirectory(targetFile, to_file);
+					} else {
+						Utils.copyFile(targetFile.getAbsolutePath(), to_file.getAbsolutePath());
+					}
 
-			if (targetFile.isDirectory())
-			{
-				Utils.copyDirectory(targetFile, to_file);
+					headersString = http_ver + " 201 Created\r\n\r\n";
+					connectedClient.getOutputStream().write(headersString.getBytes());
+					connectedClient.getOutputStream().flush();
+					connectedClient.close();
+					return;
+				}
 			}
-			else
-			{
-				Utils.copyFile(targetFile.getAbsolutePath(), to_file.getAbsolutePath());
-			}
-
-			headersString = http_ver + " 201 Created\r\n\r\n";
+			headersString = http_ver + " 403 Forbidden\r\n\r\n";
 			connectedClient.getOutputStream().write(headersString.getBytes());
-			connectedClient.getOutputStream().flush();
 			connectedClient.close();
 		}
 
 		private void move(String rootDir, String requestTarget, HashMap<String, String> headerList) throws  IOException {
 			String des = headerList.get("Destination");
-			String from = rootDir + requestTarget;
-			String to = rootDir + URLDecoder.decode(des, "UTF-8");
+			if (des != null) {
+				String from = rootDir + requestTarget;
+				String to = rootDir + URLDecoder.decode(des.substring(("http://" + (String) headerList.get("Host")).length()), "UTF-8");
 
-			File targetFile = new File(from);
-			File to_file = new File(to);
-			File dir = to_file.isDirectory() ? to_file : to_file.getParentFile();
-			if (!dir.canWrite()) {
-				headersString = http_ver + " 403 Forbidden\r\n\r\n";
-				connectedClient.getOutputStream().write(headersString.getBytes());
-				connectedClient.close();
-				return;
+				File targetFile = new File(from);
+				File to_file = new File(to);
+				File dir = to_file.isDirectory() ? to_file : to_file.getParentFile();
+				if (dir.canWrite()) {
+					targetFile.renameTo(to_file);
+
+					Log.d(TAG, from);
+					Log.d(TAG, to);
+					headersString = http_ver + " 201 Created\r\n\r\n";
+					connectedClient.getOutputStream().write(headersString.getBytes());
+					connectedClient.getOutputStream().flush();
+					connectedClient.close();
+					return;
+				}
 			}
-
-			targetFile.renameTo(to_file);
-
-			Log.d(TAG, from);
-			Log.d(TAG, to);
-
-			headersString = http_ver + " 201 Created\r\n\r\n";
+			// Return error if something went wrong...
+			headersString = http_ver + " 403 Forbidden\r\n\r\n";
 			connectedClient.getOutputStream().write(headersString.getBytes());
-			connectedClient.getOutputStream().flush();
 			connectedClient.close();
 		}
 
