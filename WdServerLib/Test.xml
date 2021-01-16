@@ -1,145 +1,74 @@
-<?xml version="1.0" encoding="utf-8" ?>.
-<d:multistatus xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:card="urn:ietf:params:xml:ns:carddav"
-    xmlns:cs="http://calendarserver.org/ns/" xmlns:d="DAV:">
-    <d:response>
-        <d:href>/Android/data/com.hyperionics.avar/files/eBooks/</d:href>
-        <d:propstat>
-            <d:prop>
-                <d:href>http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/
-                </d:href>
-                <d:isreadonly>FALSE</d:isreadonly>
-                <d:lockdiscovery></d:lockdiscovery>
-                <d:resourcetype>
-                    <d:collection />
-                </d:resourcetype>
-                <d:getcontentlength />
-                <d:getetag>805303658_-113448266</d:getetag>
-                <d:getlastmodified>Wed, 13 Jan 2021 00:54:48 GMT</d:getlastmodified>
-                <d:creationdate />
-            </d:prop>
-            <d:status>HTTP/1.1 200 OK</d:status>
-        </d:propstat>
-        <d:propstat>
-            <d:prop>
-                <srt_modifiedtime />
-                <d:Win32FileAttributes />
-                <srt_lastaccesstime />
-                <srt_creationtime />
-                <d:locktoken />
-                <srt_proptimestamp />
-                <d:BSI_isreadonly />
-                <d:activelock />
-                <d:collection />
-                <d:SRT_fileattributes />
-                <d:ishidden />
-            </d:prop>
-            <d:status>HTTP/1.1 404 Not Found</d:status>
-        </d:propstat>
-    </d:response>
-    <d:response>
-        <d:href>
-            /Android/data/com.hyperionics.avar/files/eBooks/Lose%20the%20Resume%20Land%20the%20Job.pdf.epub
-        </d:href>
-        <d:propstat>
-            <d:prop>
-                <d:href>
-                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/Lose%20the%20Resume%20Land%20the%20Job.pdf.epub
-                </d:href>
-                <d:isreadonly>TRUE</d:isreadonly>
-                <d:lockdiscovery></d:lockdiscovery>
-                <d:resourcetype />
-                <d:getcontentlength>6579572</d:getcontentlength>
-                <d:getetag>-565370811_-2001640843</d:getetag>
-                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
-                <d:creationdate />
-            </d:prop>
-            <d:status>HTTP/1.1 200 OK</d:status>
-        </d:propstat>
-        <d:propstat>
-            <d:prop>
-                <srt_modifiedtime />
-                <d:Win32FileAttributes />
-                <srt_lastaccesstime />
-                <srt_creationtime />
-                <d:locktoken />
-                <srt_proptimestamp />
-                <d:BSI_isreadonly />
-                <d:activelock />
-                <d:collection />
-                <d:SRT_fileattributes />
-                <d:ishidden />
-            </d:prop>
-            <d:status>HTTP/1.1 404 Not Found</d:status>
-        </d:propstat>
-    </d:response>
-    <d:response>
-        <d:href>/Android/data/com.hyperionics.avar/files/eBooks/Const_Dem.pdf.epub</d:href>
-        <d:propstat>
-            <d:prop>
-                <d:href>
-                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/Const_Dem.pdf.epub
-                </d:href>
-                <d:isreadonly>TRUE</d:isreadonly>
-                <d:lockdiscovery></d:lockdiscovery>
-                <d:resourcetype />
-                <d:getcontentlength>5783</d:getcontentlength>
-                <d:getetag>2113001049_-2001640843</d:getetag>
-                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
-                <d:creationdate />
-            </d:prop>
-            <d:status>HTTP/1.1 200 OK</d:status>
-        </d:propstat>
-        <d:propstat>
-            <d:prop>
-                <srt_modifiedtime />
-                <d:Win32FileAttributes />
-                <srt_lastaccesstime />
-                <srt_creationtime />
-                <d:locktoken />
-                <srt_proptimestamp />
-                <d:BSI_isreadonly />
-                <d:activelock />
-                <d:collection />
-                <d:SRT_fileattributes />
-                <d:ishidden />
-            </d:prop>
-            <d:status>HTTP/1.1 404 Not Found</d:status>
-        </d:propstat>
-    </d:response>
-    <d:response>
-        <d:href>
-            /Android/data/com.hyperionics.avar/files/eBooks/AtlasShrugged%20Hebrew%20Small%20%2894873434%29.pdf.epub
-        </d:href>
-        <d:propstat>
-            <d:prop>
-                <d:href>
-                    http://192.168.86.104:8080/Android/data/com.hyperionics.avar/files/eBooks/AtlasShrugged%20Hebrew%20Small%20%2894873434%29.pdf.epub
-                </d:href>
-                <d:isreadonly>TRUE</d:isreadonly>
-                <d:lockdiscovery></d:lockdiscovery>
-                <d:resourcetype />
-                <d:getcontentlength>102808</d:getcontentlength>
-                <d:getetag>192778072_-2001640843</d:getetag>
-                <d:getlastmodified>Mon, 02 Nov 2020 11:22:08 GMT</d:getlastmodified>
-                <d:creationdate />
-            </d:prop>
-            <d:status>HTTP/1.1 200 OK</d:status>
-        </d:propstat>
-        <d:propstat>
-            <d:prop>
-                <srt_modifiedtime />
-                <d:Win32FileAttributes />
-                <srt_lastaccesstime />
-                <srt_creationtime />
-                <d:locktoken />
-                <srt_proptimestamp />
-                <d:BSI_isreadonly />
-                <d:activelock />
-                <d:collection />
-                <d:SRT_fileattributes />
-                <d:ishidden />
-            </d:prop>
-            <d:status>HTTP/1.1 404 Not Found</d:status>
-        </d:propstat>
-    </d:response>
-</d:multistatus>
+<D:multistatus xmlns:D="DAV:">
+    <D:response>
+        <D:href>/</D:href>
+        <D:propstat>
+            <D:prop>
+                <d:href>http://localhost:8080/</d:href>
+                <D:creationdate/>
+                <D:getlastmodified>Fri, 15 Jan 2021 12:52:59 GMT</D:getlastmodified>
+                <D:isreadonly>TRUE</D:isreadonly>
+                <d:lockdiscovery/>
+                <D:getetag>1610715179000</D:getetag>
+                <D:resourcetype>
+                    <D:collection/>
+                </D:resourcetype>
+                <D:getcontentlength/>
+            </D:prop>
+            <D:status>HTTP/1.1 200 OK</D:status>
+        </D:propstat>
+    </D:response>
+    <D:response>
+        <D:href>/emulated/</D:href>
+        <D:propstat>
+            <D:prop>
+                <d:href>http://localhost:8080/emulated/</d:href>
+                <D:creationdate/>
+                <D:getlastmodified>Fri, 15 Jan 2021 12:53:00 GMT</D:getlastmodified>
+                <D:isreadonly>TRUE</D:isreadonly>
+                <d:lockdiscovery/>
+                <D:getetag>1610715180000</D:getetag>
+                <D:resourcetype>
+                    <D:collection/>
+                </D:resourcetype>
+                <D:getcontentlength/>
+            </D:prop>
+            <D:status>HTTP/1.1 200 OK</D:status>
+        </D:propstat>
+    </D:response>
+    <D:response>
+        <D:href>/AE28-0F14/</D:href>
+        <D:propstat>
+            <D:prop>
+                <d:href>http://localhost:8080/AE28-0F14/</d:href>
+                <D:creationdate/>
+                <D:getlastmodified>Thu, 01 Jan 1970 00:00:00 GMT</D:getlastmodified>
+                <D:isreadonly>TRUE</D:isreadonly>
+                <d:lockdiscovery/>
+                <D:getetag>0</D:getetag>
+                <D:resourcetype>
+                    <D:collection/>
+                </D:resourcetype>
+                <D:getcontentlength/>
+            </D:prop>
+            <D:status>HTTP/1.1 200 OK</D:status>
+        </D:propstat>
+    </D:response>
+    <D:response>
+        <D:href>/com.hyperionics.webdavserver/</D:href>
+        <D:propstat>
+            <D:prop>
+                <d:href>http://localhost:8080/com.hyperionics.webdavserver/</d:href>
+                <D:creationdate/>
+                <D:getlastmodified>Fri, 08 Jan 2021 20:39:24 GMT</D:getlastmodified>
+                <D:isreadonly>FALSE</D:isreadonly>
+                <d:lockdiscovery/>
+                <D:getetag>1610138364000</D:getetag>
+                <D:resourcetype>
+                    <D:collection/>
+                </D:resourcetype>
+                <D:getcontentlength/>
+            </D:prop>
+            <D:status>HTTP/1.1 200 OK</D:status>
+        </D:propstat>
+    </D:response>
+</D:multistatus>
