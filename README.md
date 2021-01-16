@@ -61,7 +61,8 @@ to start the Mini WebDAV Server settings activity:
         startActivity(intent);
 
 That's all! Hope it will be useful to other developers as well. I don't recommend making a consumer product from
-this - the security issues would need serious consideration.
+this - the security issues would need serious consideration. <b>If you use this project in any way, please send
+me a note (email or post to Discussions area here) so that I would know it's worth maintaining...</b>
 
 <p align="center">
 <img src="images/screenshot.png" >
