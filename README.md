@@ -1,4 +1,4 @@
-# Mini WebDAV Server for Android
+# Mini WebDAV Server for Android [![](https://jitpack.io/v/gregko/Mini-WebDAV-server-for-Android.svg)](https://jitpack.io/#gregko/Mini-WebDAV-server-for-Android)
 
 I originally cloned this from https://github.com/erspicu/Baxermux.server.http, however there
 was so much to change, fix, enhance, that I finally created a new Android app project, copied
