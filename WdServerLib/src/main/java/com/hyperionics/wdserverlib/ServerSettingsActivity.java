@@ -131,7 +131,6 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
             }
             else {
                 if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Log.d(TAG, "Enable storage access...");
                     Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.wds_approve_perm,
                             Snackbar.LENGTH_LONG).setAction(R.string.wds_action_settings, new View.OnClickListener() {
                         @Override
@@ -168,7 +167,7 @@ public class ServerSettingsActivity extends AppCompatActivity implements EasyPer
     @Override
     public void onRationaleDenied(int requestCode) {
         mAllStorageSwitch.setChecked(false);
-        Log.d(TAG, "Storage rationale denied");
+        //Log.d(TAG, "Storage rationale denied");
     }
     //endregion
 

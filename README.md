@@ -49,7 +49,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency your own app's build gradle:
 
 	dependencies {
-	        debugImplementation 'com.github.gregko:Mini-WebDAV-server-for-Android:1.5.8'
+	        debugImplementation 'com.github.gregko:Mini-WebDAV-server-for-Android:v1.6.0'
 	}
 
 Then make yourself a discrete debug only button or menu item (or as I did - a long press action...)
