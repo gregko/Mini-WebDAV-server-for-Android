@@ -82,25 +82,25 @@ public class HttpService extends Service
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		Log.d(TAG, "service bind");
+		//Log.d(TAG, "service bind");
 		return mBinder;
 	}
 
 	@Override
 	public boolean onUnbind(Intent intent) {
-		Log.d(TAG, "service onUnbind");
+		//Log.d(TAG, "service onUnbind");
 		return super.onUnbind(intent);
 	}
 
 	@Override
 	public void onCreate()
 	{
-		Log.d(TAG, "service creat");
+		//Log.d(TAG, "service created");
 	}
 
 	@Override
 	public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-		Log.d(TAG, "service start  - http server start");
+		//Log.d(TAG, "service start  - http server start");
 		boolean wholeStorage = getSharedPreferences("WebDav", MODE_PRIVATE).getBoolean("WholeStorage", false);
 		mDataDir = getFilesDir().getParentFile();
 		File wwwRoot = new File(wholeStorage ? "/storage" : getApplicationContext().getExternalFilesDir(null).getAbsolutePath());
@@ -151,7 +151,7 @@ public class HttpService extends Service
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, "service destroy");
+		//Log.d(TAG, "service destroy");
 		mDone = true;
 
 		// Close the server service
@@ -227,7 +227,7 @@ public class HttpService extends Service
 				mWifiLock.release();
 			}
 
-			Log.d(TAG, "http server close");
+			//Log.d(TAG, "http server close");
 		}
 	}
 
@@ -268,8 +268,8 @@ public class HttpService extends Service
 							nl = false;
 					}
 					requestStr = new String(bStream.toByteArray(), "UTF-8");
-					Log.d(TAG, "requestStr length: " + requestStr.length());
-					Log.d(TAG, "requestStr:\n" + requestStr);
+					//Log.d(TAG, "requestStr length: " + requestStr.length());
+					//Log.d(TAG, "requestStr:\n" + requestStr);
 				}
 
 				// header analysis area start
@@ -277,7 +277,7 @@ public class HttpService extends Service
 				try
 				{
 					firstline = requestStr.substring(0, requestStr.indexOf("\r\n"));
-					Log.d(TAG, "firstLine: [" + firstline + "]");
+					//Log.d(TAG, "firstLine: [" + firstline + "]");
 				}
 				catch (Exception ex)
 				{
@@ -296,7 +296,7 @@ public class HttpService extends Service
 				HashMap<String, String> headerList = new HashMap();
 				for (String i : requestHeaderStr.split("\r\n"))
 				{
-					Log.d(TAG, "h : [" + i + "]");
+					//Log.d(TAG, "h : [" + i + "]");
 					headerList.put(i.substring(0, i.indexOf(": ")), i.substring(i.indexOf(": ") + 2));
 				}
 				String rootDir = mRootDir;
@@ -495,7 +495,7 @@ public class HttpService extends Service
 
 			// http://stackoverflow.com/questions/4412848/xml-node-to-string-in-java
 			String xmlbody_str = nodeToString(doc.getDocumentElement());
-			Log.d(TAG, xmlbody_str);
+			//Log.d(TAG, xmlbody_str);
 
 			body = xmlbody_str.getBytes();
 			headersString = http_ver + " 207 OK\r\n";
@@ -579,7 +579,7 @@ public class HttpService extends Service
 					break;
 			}
 			String patchStr = new String(bStream.toByteArray(), "UTF-8");
-			Log.d(TAG, "patchStr:\n" + patchStr);
+			//Log.d(TAG, "patchStr:\n" + patchStr);
 				/*
 				Sample patchStr:
 				<?xml version="1.0" encoding="utf-8" ?><D:propertyupdate xmlns:D="DAV:" xmlns:srtns="http://www.southrivertech.com/"><D:set><D:prop><srtns:srt_modifiedtime>2019-06-04T15:42:53Z</srtns:srt_modifiedtime><srtns:srt_creationtime>2021-01-02T22:33:15Z</srtns:srt_creationtime><srtns:srt_proptimestamp>2021-01-02T17:33:15Z</srtns:srt_proptimestamp></D:prop></D:set></D:propertyupdate>
@@ -645,8 +645,8 @@ public class HttpService extends Service
 				if (dir.canWrite()) {
 					targetFile.renameTo(to_file);
 
-					Log.d(TAG, from);
-					Log.d(TAG, to);
+					//Log.d(TAG, from);
+					//Log.d(TAG, to);
 					headersString = http_ver + " 201 Created\r\n\r\n";
 					connectedClient.getOutputStream().write(headersString.getBytes());
 					connectedClient.getOutputStream().flush();
@@ -693,20 +693,20 @@ public class HttpService extends Service
 		private void mkcol(String rootDir, String requestTarget) throws IOException {
 			File check_dir = new File(rootDir + requestTarget);
 
-			Log.d(TAG, "mkcol debug : " + rootDir + requestTarget);
+			//Log.d(TAG, "mkcol debug : " + rootDir + requestTarget);
 
 			if (!check_dir.exists())
 			{
 				// Directory does not exist, create
 				headersString = http_ver + " " + "201 Created" + "\r\n";
 				boolean res = check_dir.mkdir();
-				Log.d(TAG, "- mkdir() result: " + res);
+				//Log.d(TAG, "- mkdir() result: " + res);
 			}
 			else
 			{
 				// Prohibited
 				headersString = http_ver + " " + "403 Forbidden" + "\r\n";
-				Log.d(TAG, "- this directory already exists.");
+				//Log.d(TAG, "- this directory already exists.");
 			}
 			headersString += "\r\n";
 			connectedClient.getOutputStream().write(headersString.getBytes());
