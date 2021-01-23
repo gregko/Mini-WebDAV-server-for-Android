@@ -17,8 +17,11 @@ Another issue with the "Device File Explorer" in Android Studio is that it does 
 files and directories (with names starting with a dot), which I need to manage too.
 
 Decided to resurrect this WebDAV server and make it a part of my app, at least in the DEBUG mode.
-Now I can access these folders, using any WebDAV client. On my Windows development host I use the
-excellent WebDrive product - it mounts the directory exported by the Mini WebDAV server as a
+Now I can access these folders, using any WebDAV client. On my Windows development host I simply
+map a network drive to emulator IP address - instructions e.g. here:
+https://itechbestpractices.com/transfer-files-from-android-to-pc-wireless-without-internet/
+
+It mounts the directory exported by the Mini WebDAV server as a
 Windows virtual drive, and I can use the native Windows File Explorer, or command prompt, can view and
 edit the files as if they were local to my computer.
 
