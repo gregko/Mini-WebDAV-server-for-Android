@@ -35,9 +35,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -474,8 +472,10 @@ public class HttpService extends Service
 						n.appendChild(doc.createElement("D:getcontentlength"))
 								.setTextContent(String.valueOf(file_obj.length()));
 					}
-
 							/* These seem useless...
+
+							// At this time n is the prop node of the previous propstat,
+							// need to get the the response node.
 							n = respNode.appendChild(doc.createElement("D:propstat"))
 									.appendChild(doc.createElement("D:prop"));
 							n.appendChild(doc.createElement("srt_modifiedtime"));
@@ -636,8 +636,12 @@ public class HttpService extends Service
 		private void move(String rootDir, String requestTarget, HashMap<String, String> headerList) throws  IOException {
 			String des = headerList.get("Destination");
 			if (des != null) {
+				if (des.startsWith("http://"))
+					des = URLDecoder.decode(des.substring(("http://" + (String) headerList.get("Host")).length()), "UTF-8");
+				else
+					des = URLDecoder.decode(des, "UTF-8");
 				String from = rootDir + requestTarget;
-				String to = rootDir + URLDecoder.decode(des.substring(("http://" + (String) headerList.get("Host")).length()), "UTF-8");
+				String to = rootDir + des;
 
 				File targetFile = new File(from);
 				File to_file = new File(to);

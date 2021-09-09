@@ -2,11 +2,10 @@ plugins {
     id 'com.android.library'
 }
 
-def VERSION_CODE = 10600
-def VERSION_NAME = "1.6.0"
+def VERSION_CODE = 10602
+def VERSION_NAME = "1.6.2"
 
 android {
-    publishNonDefault true
     compileSdkVersion 30
 
     defaultConfig {
@@ -26,7 +25,6 @@ android {
         debug {
             buildConfigField "String", "VERSION_NAME", "\"" + VERSION_NAME + "\""
             buildConfigField "int", "VERSION_CODE", VERSION_CODE.toString()
-            debuggable true
         }
     }
     compileOptions {
@@ -36,11 +34,11 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
     testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
