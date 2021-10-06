@@ -2,8 +2,8 @@ plugins {
     id 'com.android.library'
 }
 
-def VERSION_CODE = 10602
-def VERSION_NAME = "1.6.2"
+def VERSION_CODE = 10603
+def VERSION_NAME = "1.6.3"
 
 android {
     compileSdkVersion 30

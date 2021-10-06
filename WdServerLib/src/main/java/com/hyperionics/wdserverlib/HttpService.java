@@ -24,6 +24,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -303,7 +304,7 @@ public class HttpService extends Service
 				}
 
 				if (requestMethod.equals("PUT"))
-					put(rootDir, requestTarget, inputStream);
+					put(rootDir, requestTarget, inputStream, headerList);
 				else if (requestMethod.equals("PROPPATCH"))
 					proppatch(rootDir, requestTarget, inputStream, headerList);
 				else if (requestMethod.equals("COPY"))
@@ -512,7 +513,7 @@ public class HttpService extends Service
 			connectedClient.close();
 		}
 
-		private void put(String rootDir, String requestTarget, InputStream inputStream) throws  IOException {
+		private void put(String rootDir, String requestTarget, InputStream inputStream, HashMap<String, String> headerList) throws  IOException {
 			File targetFile = new File(rootDir + requestTarget);
 			if (!targetFile.getParentFile().canWrite()) {
 				// Read only directory, return 403 Forbidden status code
@@ -530,19 +531,49 @@ public class HttpService extends Service
 				int readCount;
 				long bytesToRead = recBuffer.length;
 				int available;
-				while ((available = inputStream.available()) > 0) {
-					if (bytesToRead > available)
+
+				if ("chunked".equals(headerList.get("Transfer-Encoding"))) {
+					ChunkedInputStream cin = new ChunkedInputStream(new DataInputStream(inputStream));
+					while (!cin.isDone()) {
+						readCount = cin.read(recBuffer, 0, (int) bytesToRead);
+						if (readCount > 0)
+							output.write(recBuffer, 0, readCount);
+					}
+//					while ((available = cin.available()) > 0) {
+//						if (bytesToRead > available)
+//							bytesToRead = available;
+//						readCount = cin.read(recBuffer, 0, (int) bytesToRead);
+//						output.write(recBuffer, 0, readCount);
+//						available = cin.available();
+//						bytesToRead = available;
+//						if (bytesToRead > recBuffer.length)
+//							bytesToRead = recBuffer.length;
+//						if (available == 0) {
+//							try {
+//								Thread.sleep(200);
+//							} catch (InterruptedException ignore) {
+//							}
+//						}
+//						if (cin.isDone())
+//							break;
+//					}
+				}
+				else {
+					while ((available = inputStream.available()) > 0) {
+						if (bytesToRead > available)
+							bytesToRead = available;
+						readCount = inputStream.read(recBuffer, 0, (int) bytesToRead);
+						output.write(recBuffer, 0, readCount);
+						available = inputStream.available();
 						bytesToRead = available;
-					readCount = inputStream.read(recBuffer, 0, (int)bytesToRead);
-					output.write(recBuffer, 0, readCount);
-					available = inputStream.available();
-					bytesToRead = available;
-					if (bytesToRead > recBuffer.length)
-						bytesToRead = recBuffer.length;
-					if (available == 0) {
-						try {
-							Thread.sleep(200);
-						} catch (InterruptedException ignore) {}
+						if (bytesToRead > recBuffer.length)
+							bytesToRead = recBuffer.length;
+						if (available == 0) {
+							try {
+								Thread.sleep(200);
+							} catch (InterruptedException ignore) {
+							}
+						}
 					}
 				}
 				headersString = http_ver + " 201 Created\r\n";
