@@ -34,7 +34,7 @@ therefore it does not need any extra permissions when built in RELEASE mode, it
 pulls WdServerLib only when built in DEBUG mode. 
 
 When run on Android 10 and lower with access to the full storage, the files and folders on an additional
-SD card are read-only. They are read-wrie on Android 11 due to the new MANAGE_EXTERNAL_STORAGE permission,
+SD card are read-only. They are read-write on Android 11 due to the new MANAGE_EXTERNAL_STORAGE permission,
 available in Android 11. On Android 10 and lower managing files there would be possible with scoped
 storage operations, after the user approves access to directories. Something to consider later.
 
